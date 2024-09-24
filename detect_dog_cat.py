@@ -1,9 +1,19 @@
 import torch
 import cv2
+import matplotlib
 import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
 
+matplotlib.use('TkAgg')  # Or 'Qt5Agg'
+
+plt.ion()  # Enable interactive mode
+
+
+plt.plot([1, 2, 3, 4, 5], [2, 4, 5, 3, 6])
+plt.show(block=True)
+# Introduce a delay to allow the plot to display
+plt.pause(50)  # Pause for 5 seconds
 # Tải mô hình YOLOv5 (sử dụng mô hình được huấn luyện sẵn)
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
 
@@ -43,7 +53,7 @@ for index, row in detected_animals.iterrows():
 # Hiển thị ảnh đã dán nhãn
 plt.imshow(cv2.cvtColor(image_with_labels, cv2.COLOR_BGR2RGB))
 plt.axis('off')
-plt.show()
+plt.show(True)
 
 # Lưu ảnh đã dán nhãn xuống ổ cứng
 output_image_path = 'labeled_image.jpg'

@@ -7,6 +7,9 @@ from sklearn.metrics import mean_squared_error
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.layers import BatchNormalization
+
 
 from sklearn.datasets import fetch_california_housing
 housing = fetch_california_housing()
@@ -39,16 +42,23 @@ print("Mean Squared Error (Linear Regression):", mse_linear)
 
 # Xây dựng mô hình Fully Connected Neural Network (Dense)
 dense_model = Sequential([
-    Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+    Dense(128, activation='relu'),
+    BatchNormalization(),
+    Dense(64, activation='relu'),
+    BatchNormalization(),
     Dense(32, activation='relu'),
-    Dense(1)  # Đầu ra dự đoán giá nhà
+    BatchNormalization(),
+    Dense(1)
 ])
 
 # Compile mô hình
 dense_model.compile(optimizer='adam', loss='mean_squared_error')
 
+# Add Early Stopping callback
+early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+
 # Huấn luyện mô hình với 100 epochs
-dense_model.fit(X_train_scaled, y_train, epochs=100, validation_data=(X_test_scaled, y_test), verbose=0)
+dense_model.fit(X_train_scaled, y_train, epochs=100, validation_data=(X_test_scaled, y_test) , callbacks=[early_stopping], verbose=0)
 
 # Dự đoán với tập kiểm tra
 y_pred_dense = dense_model.predict(X_test_scaled)

@@ -64,7 +64,7 @@ def recommend_products(user_id, user_product_matrix, user_similarity_df, n_recom
     recommended_products = sorted(product_scores.items(), key=lambda x: x[1], reverse=True)[:n_recommendations]
     
     # Return the product IDs of the top N recommendations.
-    return [product for product, score in recommended_products]
+    return [(product, score) for product, score in recommended_products]
 
 # Step 7: Example usage
 # Here we use an example user, 'user_1', to get top 5 product recommendations for them.
